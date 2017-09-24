@@ -88,6 +88,37 @@ public class MainActivity extends AppCompatActivity {
         buttonMultiply.setOnClickListener(operationListener);
         buttonMinus.setOnClickListener(operationListener);
         buttonPlus.setOnClickListener(operationListener);
+
+        Button buttonNeg = (Button) findViewById(R.id.buttonNeg);
+        buttonNeg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String value = editTextInput.getText().toString();
+                if (value.length() == 0) {
+                    editTextInput.setText("-");
+                } else {
+                    try {
+                        Double doubleValue = Double.valueOf(value);
+                        doubleValue *= -1;
+                        editTextInput.setText(doubleValue.toString());
+                    } catch (NumberFormatException e) {
+                        editTextInput.setText("");
+                    }
+                }
+            }
+        });
+
+        Button buttonClear = (Button) findViewById(R.id.buttonClear);
+        buttonClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editTextResult.setText("");
+                editTextInput.setText("");
+                pendingOperation = "";
+                operand1 = null;
+            }
+        });
+
     } // onCreate() end
 
     @Override

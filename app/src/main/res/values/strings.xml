@@ -17,6 +17,8 @@
     <string name="buttonAddition">+</string>
     <string name="buttonDecimal">.</string>
     <string name="buttonEquals">=</string>
+    <string name="buttonNeg">Neg</string>
+    <string name="buttonClear">C</string>
 
 
 </resources>
