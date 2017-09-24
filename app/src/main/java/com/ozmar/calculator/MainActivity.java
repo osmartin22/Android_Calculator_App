@@ -9,13 +9,12 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText editTextResult;
-    EditText editTextInput;
-    TextView textViewOperation;
+    private EditText editTextResult;
+    private EditText editTextInput;
+    private TextView textViewOperation;
 
-    Double operand1 = null;
-    Double operand2 = null;
-    String pendingOperation = "=";
+    private Double operand1 = null;
+    private String pendingOperation = "=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +70,11 @@ public class MainActivity extends AppCompatActivity {
                 Button b = (Button) view;
                 String operation = b.getText().toString();
                 String value = editTextInput.getText().toString();
-                if(value.length() != 0) {
-                    performOperation(value, operation);
+                try {
+                    Double doubleValue = Double.valueOf(value);
+                    performOperation(doubleValue, value);
+                } catch (NumberFormatException e) {
+                    editTextResult.setText("");
                 }
 
                 pendingOperation = operation;
@@ -88,7 +90,44 @@ public class MainActivity extends AppCompatActivity {
 
     } // onCreate() end
 
-    private void performOperation(String value, String operation) {
-        textViewOperation.setText(operation);
-    }
+    private void performOperation(Double value, String operation) {
+        if (operand1 == null) {
+            operand1 = value;
+        } else {
+
+            if (pendingOperation.equals("=")) {
+                pendingOperation = operation;
+            }
+
+            switch (pendingOperation) {
+                case "=":
+                    operand1 = value;
+                    break;
+
+                case "/":
+                    if (value == 0) {
+                        operand1 = 0.0;
+                    } else {
+                        operand1 /= value;
+                    }
+                    break;
+
+                case "*":
+                    operand1 *= value;
+                    break;
+
+                case "-":
+                    operand1 -= value;
+                    break;
+
+                case "+":
+                    operand1 += value;
+                    break;
+            } // switch() end
+        }
+
+        editTextResult.setText(operand1.toString());
+        editTextInput.setText("");
+
+    } // performOperation() end
 }
