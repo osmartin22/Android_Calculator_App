@@ -8,13 +8,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-
     private EditText editTextResult;
     private EditText editTextInput;
     private TextView textViewOperation;
 
     private Double operand1 = null;
     private String pendingOperation = "=";
+
+    private static final String STATE_PENDING_OPERATION = "PendingOperation";
+    private static final String STATE_OPERAND1 = "Operand1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         Button buttonEquals = (Button) findViewById(R.id.buttonEquals);
         Button buttonDivide = (Button) findViewById(R.id.buttonDivide);
         Button buttonMultiply = (Button) findViewById(R.id.buttonMultiply);
-        Button buttonSubtract = (Button) findViewById(R.id.buttonSubtract);
-        Button buttonAdd = (Button) findViewById(R.id.buttonAdd);
+        Button buttonMinus = (Button) findViewById(R.id.buttonSubtract);
+        Button buttonPlus = (Button) findViewById(R.id.buttonAdd);
 
         View.OnClickListener numberListener = new View.OnClickListener() {
             @Override
@@ -63,21 +65,20 @@ public class MainActivity extends AppCompatActivity {
         button9.setOnClickListener(numberListener);
         buttonDecimal.setOnClickListener(numberListener);
 
-
         View.OnClickListener operationListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Button b = (Button) view;
-                String operation = b.getText().toString();
+                String op = b.getText().toString();
                 String value = editTextInput.getText().toString();
                 try {
                     Double doubleValue = Double.valueOf(value);
-                    performOperation(doubleValue, value);
+                    performOperation(doubleValue, op);
                 } catch (NumberFormatException e) {
-                    editTextResult.setText("");
+                    editTextInput.setText("");
                 }
 
-                pendingOperation = operation;
+                pendingOperation = op;
                 textViewOperation.setText(pendingOperation);
             }
         };
@@ -85,25 +86,38 @@ public class MainActivity extends AppCompatActivity {
         buttonEquals.setOnClickListener(operationListener);
         buttonDivide.setOnClickListener(operationListener);
         buttonMultiply.setOnClickListener(operationListener);
-        buttonSubtract.setOnClickListener(operationListener);
-        buttonAdd.setOnClickListener(operationListener);
-
+        buttonMinus.setOnClickListener(operationListener);
+        buttonPlus.setOnClickListener(operationListener);
     } // onCreate() end
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(STATE_PENDING_OPERATION, pendingOperation);
+        if (operand1 != null) {
+            outState.putDouble(STATE_OPERAND1, operand1);
+        }
+        super.onSaveInstanceState(outState);
+    } // onSaveInstance() end
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        pendingOperation = savedInstanceState.getString(STATE_PENDING_OPERATION);
+        operand1 = savedInstanceState.getDouble(STATE_OPERAND1);
+        textViewOperation.setText(pendingOperation);
+    } // onRestoreInstance() end
+
     private void performOperation(Double value, String operation) {
-        if (operand1 == null) {
+        if (null == operand1) {
             operand1 = value;
         } else {
-
             if (pendingOperation.equals("=")) {
                 pendingOperation = operation;
             }
-
             switch (pendingOperation) {
                 case "=":
                     operand1 = value;
                     break;
-
                 case "/":
                     if (value == 0) {
                         operand1 = 0.0;
@@ -111,23 +125,19 @@ public class MainActivity extends AppCompatActivity {
                         operand1 /= value;
                     }
                     break;
-
                 case "*":
                     operand1 *= value;
                     break;
-
                 case "-":
                     operand1 -= value;
                     break;
-
                 case "+":
                     operand1 += value;
                     break;
-            } // switch() end
+            }
         }
 
         editTextResult.setText(operand1.toString());
         editTextInput.setText("");
-
     } // performOperation() end
 }
