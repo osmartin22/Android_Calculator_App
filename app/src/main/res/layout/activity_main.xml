@@ -10,9 +10,6 @@
         android:id="@+id/editTextResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp"
         android:ems="10"
         android:focusable="false"
         android:focusableInTouchMode="false"
@@ -26,15 +23,11 @@
         android:id="@+id/editTextInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint=""
         android:inputType="numberSigned|numberDecimal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextResult" />
+        app:layout_constraintLeft_toLeftOf="@id/editTextResult"
+        app:layout_constraintTop_toBottomOf="@id/editTextResult" />
 
     <TextView
         android:id="@+id/textViewOperation"
@@ -43,11 +36,11 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:text=""
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@id/editTextInput"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/editTextInput"
         app:layout_constraintTop_toTopOf="@+id/editTextInput" />
 
     <Button
@@ -117,7 +110,6 @@
         android:id="@+id/button7"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="8dp"
         android:text="@string/button7"
         app:layout_constraintLeft_toLeftOf="@id/editTextInput"
         app:layout_constraintTop_toBottomOf="@+id/editTextInput" />
@@ -168,7 +160,7 @@
         app:layout_constraintLeft_toRightOf="@+id/button3" />
 
     <Button
-        android:id="@+id/buttonAddition"
+        android:id="@+id/buttonAdd"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
